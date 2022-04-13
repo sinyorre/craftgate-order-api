@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.order.model.Order;
 import org.example.order.model.OrderCreate;
 import org.example.order.model.OrderItem;
+import org.example.order.model.OrderStatus;
 import org.example.order.ports.api.OrderServicePort;
 import org.example.order.ports.spi.OrderSpiPort;
 import org.example.payment.ports.spi.PaymentSpiPort;
@@ -23,8 +24,10 @@ public class OrderService implements OrderServicePort {
     @Override
     public Order create(OrderCreate orderCreate) {
         validate(orderCreate);
+        orderCreate.setOrderStatus(OrderStatus.RECEIVED);
         save(orderCreate);
         pay(orderCreate);
+        orderCreate.setOrderStatus(OrderStatus.PREPARING);
         return save(orderCreate);
     }
 

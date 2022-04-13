@@ -21,6 +21,7 @@ public class OrderJpaAdapter implements OrderSpiPort {
     @Override
     public Order save(OrderCreate orderCreate) {
         OrderEntity orderEntity = OrderEntity.builder()
+                .id(orderCreate.getId())
                 .address(orderCreate.getAddress())
                 .note(orderCreate.getNote())
                 .price(orderCreate.getPrice())
