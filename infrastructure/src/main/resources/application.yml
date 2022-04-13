@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orderdb
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+adapters:
+  restaurant:
+    baseUrl: http://${RESTAURANT_API_HOST:localhost}:8080
+    paymentPath: /payment
+    menuItemsPath: /items
+
+server:
+  port: 8081
