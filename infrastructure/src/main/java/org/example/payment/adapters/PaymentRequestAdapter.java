@@ -1,13 +1,17 @@
 package org.example.payment.adapters;
 
 import io.craftgate.Craftgate;
+import io.craftgate.exception.CraftgateException;
 import io.craftgate.model.Currency;
 import io.craftgate.model.PaymentGroup;
 import io.craftgate.model.PaymentPhase;
+import io.craftgate.model.PaymentStatus;
 import io.craftgate.request.CreatePaymentRequest;
 import io.craftgate.request.dto.Card;
 import io.craftgate.request.dto.PaymentItem;
+import io.craftgate.response.PaymentResponse;
 import lombok.RequiredArgsConstructor;
+import org.example.common.OrderException;
 import org.example.order.model.CardDetails;
 import org.example.order.model.OrderCreate;
 import org.example.order.model.OrderItem;
@@ -28,18 +32,15 @@ public class PaymentRequestAdapter implements PaymentSpiPort {
     @Override
     public void pay(OrderCreate orderCreate) {
         List<OrderItem> orderItems = orderCreate.getOrderItems();
-        List<PaymentItem> items = new ArrayList<>();
+        if (orderItems == null) throw new OrderException("order items cannot be null");
+        List<PaymentItem> items = toPaymentItems(orderItems);
+        CreatePaymentRequest paymentRequest = createPaymentRequest(orderCreate, items);
+        PaymentResponse paymentResponse = craftgate.payment().createPayment(paymentRequest);
+    }
 
-        orderItems.forEach(orderItem -> {
-            items.add(PaymentItem.builder()
-                    .name(orderItem.getName())
-                    .externalId(UUID.randomUUID().toString())
-                    .price(orderItem.getPrice())
-                    .build());
-        });
-
+    private CreatePaymentRequest createPaymentRequest(OrderCreate orderCreate, List<PaymentItem> items) {
         CardDetails cardDetails = orderCreate.getCardDetails();
-        CreatePaymentRequest request = CreatePaymentRequest.builder()
+        return CreatePaymentRequest.builder()
                 .price(orderCreate.getPrice())
                 .paidPrice(orderCreate.getPrice())
                 .walletPrice(BigDecimal.ZERO)
@@ -57,6 +58,17 @@ public class PaymentRequestAdapter implements PaymentSpiPort {
                         .build())
                 .items(items)
                 .build();
-        craftgate.payment().createPayment(request);
+    }
+
+    private List<PaymentItem> toPaymentItems(List<OrderItem> orderItems) {
+        List<PaymentItem> items = new ArrayList<>();
+        orderItems.forEach(orderItem -> {
+            items.add(PaymentItem.builder()
+                    .name(orderItem.getName())
+                    .externalId(UUID.randomUUID().toString())
+                    .price(orderItem.getPrice())
+                    .build());
+        });
+        return items;
     }
 }
