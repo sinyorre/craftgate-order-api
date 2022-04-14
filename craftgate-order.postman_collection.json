@@ -1,0 +1,37 @@
+{
+	"info": {
+		"_postman_id": "b27c224d-13db-4fc7-8e8d-35c46eee19c8",
+		"name": "craftgate-order",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "place-order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"restaurantId\": 4,\r\n    \"address\": \"adress\",\r\n    \"price\": 35,\r\n    \"note\": \"note\",\r\n    \"referenceCode\": \"ref code\",\r\n    \"orderItems\": [\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Döner\",\r\n            \"price\": 35\r\n        }\r\n    ],\r\n    \"cardDetails\": {\r\n        \"holderName\": \"Haluk Demir\",\r\n        \"cardNumber\": \"5258640000000001\",\r\n        \"expireYear\": \"2044\",\r\n        \"expireMonth\": \"07\",\r\n        \"cvc\": \"000\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/place-order",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"place-order"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
