@@ -27,7 +27,6 @@ public class RestaurantRestAdapterIT {
     @BeforeAll
     static void setup() {
         wireMockServer.start();
-
         wireMockServer.stubFor(
                 get("/items/1")
                         .willReturn(aResponse()
@@ -49,7 +48,7 @@ public class RestaurantRestAdapterIT {
     }
 
     @Test
-    void should_call_restaurant_api(){
+    void should_retrieve_menuItem(){
         Long menuItemId = 1L;
         MenuItem menuItem = restaurantRestAdapter.retrieveMenuItem(menuItemId);
         MenuItem expectedMenuItem = MenuItem.builder()

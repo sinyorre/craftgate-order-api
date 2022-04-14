@@ -12,17 +12,6 @@ public class RestaurantFakeAdapter implements RestaurantSpiPort {
     private static final Long CREATE_NOT_ACTIVE_MENU_ITEM_ID = 100L;
 
     @Override
-    public List<MenuItem> retrieveMenuItems(List<Long> orderItemIds) {
-        MenuItem menuItemOne = MenuItem.builder()
-                .price(BigDecimal.TEN)
-                .build();
-        MenuItem menuItemTwo = MenuItem.builder()
-                .price(BigDecimal.valueOf(15))
-                .build();
-        return List.of(menuItemOne, menuItemTwo);
-    }
-
-    @Override
     public MenuItem retrieveMenuItem(Long menuItemId) {
         if (Objects.equals(menuItemId, CREATE_NOT_ACTIVE_MENU_ITEM_ID)) {
             return MenuItem.builder()
